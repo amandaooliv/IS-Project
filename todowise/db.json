@@ -1,0 +1,140 @@
+[
+{
+    "model": "app.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$G44EDhZx8ML34B0Usv9shO$KNopxJMzTYrpVQW9RnCyR0phVJlcRjfiQqTs3ymCoxs=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "bart",
+        "first_name": "Bart",
+        "last_name": "Simpson",
+        "email": "bart@simpsons.org",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-03-01T21:36:39.939Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+    {
+    "model": "app.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$G44EDhZx8ML34B0Usv9shO$KNopxJMzTYrpVQW9RnCyR0phVJlcRjfiQqTs3ymCoxs=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "homer",
+        "first_name": "Homer",
+        "last_name": "Simpson",
+        "email": "homer@simpsons.org",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-03-01T21:39:39.939Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "app.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$G44EDhZx8ML34B0Usv9shO$KNopxJMzTYrpVQW9RnCyR0phVJlcRjfiQqTs3ymCoxs=",
+        "last_login": "2024-03-05T10:50:20.328Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@example.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-03-05T10:17:47.461Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "app.list",
+    "pk": 1,
+    "fields": {
+        "title": "Homework",
+        "user": 1
+    }
+},
+{
+    "model": "app.list",
+    "pk": 2,
+    "fields": {
+        "title": "Tasks",
+        "user": 1
+    }
+},
+{
+    "model": "app.list",
+    "pk": 3,
+    "fields": {
+        "title": "Homer's Goals",
+        "user": 2
+    }
+},
+{
+    "model": "app.item",
+    "pk": 1,
+    "fields": {
+        "title": "Math",
+        "list": 1,
+        "done": true,
+        "created_at": "2024-03-01T21:52:45.892Z"
+    }
+},
+{
+    "model": "app.item",
+    "pk": 2,
+    "fields": {
+        "title": "Science",
+        "list": 1,
+        "done": false,
+        "created_at": "2024-03-01T21:52:49.236Z"
+    }
+},
+{
+    "model": "app.item",
+    "pk": 3,
+    "fields": {
+        "title": "English",
+        "list": 1,
+        "done": false,
+        "created_at": "2024-03-01T21:53:49.236Z"
+    }
+},
+{
+    "model": "app.item",
+    "pk": 4,
+    "fields": {
+        "title": "Clean room",
+        "list": 2,
+        "done": true,
+        "created_at": "2024-03-01T21:54:49.236Z"
+    }
+},
+{
+    "model": "app.item",
+    "pk": 5,
+    "fields": {
+        "title": "Empty trash",
+        "list": 2,
+        "done": false,
+        "created_at": "2024-03-01T21:55:49.236Z"
+    }
+},
+{
+    "model": "app.item",
+    "pk": 6,
+    "fields": {
+        "title": "Exercise",
+        "list": 3,
+        "done": false,
+        "created_at": "2024-03-01T21:55:49.236Z"
+    }
+}
+]
