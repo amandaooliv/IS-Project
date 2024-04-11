@@ -10,6 +10,6 @@ urlpatterns = [
     path('list/<int:list_id>/remove/<int:item_id>', views.remove_item, name='remove_item'),
     path('list/<int:list_id>/done/<int:item_id>', views.done_item, name='done_item'),
     path('item/<int:list_id>/<int:item_id>/', views.open_item, name='open_item'),
-
+    #path('student/', views.edit_student, name='edit_student'),
 ]
 

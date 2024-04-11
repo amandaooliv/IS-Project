@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -64,49 +64,36 @@
 
 {% block content %}
 
+<div class="container">
+        <div class="left-column">
 
     <h3>{{ list.title }}</h3>
 
     <ul>
         {% for item in list.items.all %}
         <li>
-            <span {% if item.done %}
-                  style="text-decoration-line: line-through"
-                  {% endif %}
-            >
+            <span>
                 <a href="{% url 'open_item' list.id item.id %}">
-                {{ item.title }}</a></span>
+                {{ item.title }}</a>
+                (<a href="{% url 'remove_item' list.id item.id %}">X</a>)
+            </span>
         </li>
         {% endfor %}
     </ul>
 
     <br/>
 
-    <h4 align="left">Add subject:</h4>
+    <!-- <h4 align="left">Add subject:</h4> -->
 
     <form method="post" action="{% url 'add_item' list.id %}" align="center">
         {% csrf_token %}
-        <input type="text" name="item_title">
+        Add subject: <input type="text" name="item_title">
         <input type="submit">
     </form>
 
+    </div>
 
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-
-
-    <!-- Botão de voltar -->
-    <p align="center">
-    <a href="http://127.0.0.1:8000/app/"><button>Back</button></a>
-    </p>
-
+ </div>
 
 {% endblock %}
 

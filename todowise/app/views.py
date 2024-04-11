@@ -73,7 +73,7 @@ def edit_student(request, student_id, list_id):
         student.save()
 
         return redirect('student_detail', student_id=student_id)
-    return render(request, 'app/edit_student.html', {'student': student})
+    return render(request, 'app/student.html', {'student': student})
 
 
 def add_remove_student_class(request, student_id):
