@@ -1,11 +1,24 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_protect
+
 
 from .models import User, List, Item, Student, Grade, Attendance
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, template_name = 'app/app.html')
+        students_all = Student.objects.all()
+        total_students = students_all.count()  # Conta todos os alunos
+        total_lists = List.objects.all().count()
+        total_items = Item.objects.all().count()
+        total_users = User.objects.all().count()
+        context = {
+            'students_all': students_all,
+            'total_students': total_students,
+            'total_lists': total_lists,
+            'total_items': total_items,
+            'total_users': total_users}
+        return render(request, template_name = 'app/app.html', context = context)
     else:
         return redirect('app_login')
 
@@ -14,7 +27,9 @@ def app_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(username, password)
         user = authenticate(request, username = username, password = password)
+
         if user is not None:
             login(request, user)
             return redirect('app_index')
@@ -35,7 +50,7 @@ def to_do_list(request, list_id):
 def add_item(request, list_id):
     item_title = request.POST.get('item_title')
     list = get_object_or_404(List, pk = list_id, user = request.user)
-    item = Item(title = item_title, list = list)
+    item = Item(title = item_title, list = list, user = request.user)
     item.save()
     return redirect('to_do_list', list_id = list_id)
 
@@ -119,28 +134,3 @@ def open_item(request, list_id, item_id):
     list = get_object_or_404(List, pk = list_id, user = request.user)
     item = get_object_or_404(Item, pk = item_id, list = list)
     return render(request, template_name = 'app/subjects.html', context = {'item':item})
-
-
-def count_student(request):
-    students_all = Student.objects.all()
-    total_students = students_all.count()  # Conta todos os alunos
-    context = {
-        'students_all': students_all,
-        'total_students' : total_students}
-    #count_students = Student.objects.all().count()
-    return render(request, 'app/app.html', context)
-
-
-def count_list(request):
-    total_lists = List.objects.all().count()
-    return render(request, 'app/app.html', context = {'total_lists': total_lists})
-
-
-def count_item(request):
-    total_items = Item.objects.all().count()
-    return render(request, 'app/app.html', context = {'total_items': total_items})
-
-
-def count_user(request):
-    total_users = User.objects.all().count()
-    return render(request, 'app/app.html', context = {'total_users': total_users})

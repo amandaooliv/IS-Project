@@ -64,17 +64,17 @@
 
 {% block content %}
 
-    <h3><p align="center">{{ item.title }}</p></h3>
+    <h3 class="white-text" style="text-align: center;"><p>{{ item.title }}</p></h3>
 
 <div class="right-column">
 
     <div class="container">
         <div class="user-info">
-            <h4>User Information:</h4>
-            <p><strong>Username:</strong> {{ item.user.username }}</p>
-            <p><strong>First Name:</strong> {{ item.user.first_name }}</p>
-            <p><strong>Last Name:</strong> {{ item.user.last_name }}</p>
-            <p><strong>Email:</strong> {{ item.user.email }}</p>
+            <h4 class="white-text" style="text-align: center;">User Information:</h4>
+            <p class="white-text"><strong>Username:</strong> {{ item.user.username }}</p>
+            <p class="white-text"><strong>First Name:</strong> {{ item.user.first_name }}</p>
+            <p class="white-text"><strong>Last Name:</strong> {{ item.user.last_name }}</p>
+            <p class="white-text"><strong>Email:</strong> {{ item.user.email }}</p>
         </div>
     </div>
 

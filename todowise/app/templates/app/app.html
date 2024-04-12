@@ -18,13 +18,14 @@
         }
 
         .card1 {
-            background-color: #fff;
+            background-color: #212C41;
             border-radius: 8px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin: 10px;
             flex: 1;
             transition: transform 0.3s ease;
+            color: #FFFFFF;
         }
 
         .card1:hover {
@@ -32,7 +33,7 @@
         }
 
         .card2 {
-            background-color: #fff;
+            background-color: #212C41;
             border-radius: 8px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -41,6 +42,7 @@
             transition: transform 0.3s ease;
             align-items:center;
             justify-content: center;
+            color: #FFFFFF;
 
 
         }
@@ -96,15 +98,15 @@
 
     <div class="container">
         <div class="card1">
-            <h4 align="center">Total Students {{ total_students }}</h4>
+            <h4 align="center">Total Students</h4>
             <p>{{ total_students }}</p>
         </div>
         <div class="card1">
-            <h4 align="center">Total Lists</h4>
+            <h4 align="center">Total Courses</h4>
             <p>{{ total_lists }}</p>
         </div>
         <div class="card1">
-            <h4 align="center">Total Items</h4>
+            <h4 align="center">Total Subjects</h4>
             <p>{{ total_items }}</p>
         </div>
         <div class="card1">
@@ -118,8 +120,8 @@
 
         <ul>
             {% for list in user.lists.all %}
-            <li>
-                <a href="{% url 'to_do_list' list.id %}">{{ list.title }}</a>
+            <li style="background-color: #FFFFFF;">
+                <a href="{% url 'to_do_list' list.id %}" style="color: #212C41;">{{ list.title }}</a>
             </li>
             {% endfor %}
         </ul>

@@ -67,15 +67,15 @@
 <div class="container">
         <div class="left-column">
 
-    <h3>{{ list.title }}</h3>
+    <h3 class="white-text" style="text-align: center;">{{ list.title }}</h3>
 
     <ul>
         {% for item in list.items.all %}
-        <li>
+        <li style="background-color: #212C41;">
             <span>
-                <a href="{% url 'open_item' list.id item.id %}">
+                <a href="{% url 'open_item' list.id item.id %}" style="color: #FFFFFF;">
                 {{ item.title }}</a>
-                (<a href="{% url 'remove_item' list.id item.id %}">X</a>)
+                (<a href="{% url 'remove_item' list.id item.id %}" style="color: #FFFFFF;">X</a>)
             </span>
         </li>
         {% endfor %}
@@ -87,7 +87,7 @@
 
     <form method="post" action="{% url 'add_item' list.id %}" align="center">
         {% csrf_token %}
-        Add subject: <input type="text" name="item_title">
+        <label class="white-text" style="font-size: 18px;">Add subject:</label>  <input type="text" name="item_title">
         <input type="submit">
     </form>
 
