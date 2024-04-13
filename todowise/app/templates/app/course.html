@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Subjects</title>
+    <title>Course</title>
 </head>
 
 <style>
@@ -64,22 +64,36 @@
 
 {% block content %}
 
-    <h3 class="white-text" style="text-align: center;"><p>{{ subject.title }}</p></h3>
+<div class="container">
+        <div class="left-column">
 
-<div class="right-column">
+    <h3 class="white-text" style="text-align: center;">{{ course.title }}</h3>
 
-    <div class="container">
-        <div class="user-info">
-            <h4 class="white-text" style="text-align: center;">User Information:</h4>
-            <p class="white-text"><strong>Username:</strong> {{ subject.user.username }}</p>
-            <p class="white-text"><strong>First Name:</strong> {{ subject.user.first_name }}</p>
-            <p class="white-text"><strong>Last Name:</strong> {{ subject.user.last_name }}</p>
-            <p class="white-text"><strong>Email:</strong> {{ subject.user.email }}</p>
-        </div>
+    <ul>
+        {% for subject in course.subjects.all %}
+        <li style="background-color: #212C41;">
+            <span>
+                <a href="{% url 'open_subject' course.id subject.id %}" style="color: #FFFFFF;">
+                {{ subject.title }}</a>
+                (<a href="{% url 'remove_subject' course.id subject.id %}" style="color: #FFFFFF;">X</a>)
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br/>
+
+    <!-- <h4 align="left">Add subject:</h4> -->
+
+    <form method="post" action="{% url 'add_subject' course.id %}" align="center">
+        {% csrf_token %}
+        <label class="white-text" style="font-size: 18px;">Add subject:</label>  <input type="text" name="subject_title">
+        <input type="submit">
+    </form>
+
     </div>
 
-
-</div>
+ </div>
 
 {% endblock %}
 

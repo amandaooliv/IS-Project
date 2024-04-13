@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>List</title>
+    <title>Course</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,7 +80,7 @@
 
     {% block content %}
 
-    <h3>{{ list.title }}</h3>
+    <h3>{{ course.title }}</h3>
 
     <table>
         <thead>
@@ -95,7 +95,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for student in list.student_items.all %}
+            {% for student in course.student_subjects.all %}
             <tr>
                 <td>{{ student.registration }}</td>
                 <td>{{ student.first_name_student }}</td>
@@ -113,9 +113,9 @@
 
     <h4 align="left">Add subject:</h4>
 
-    <form method="post" action="{% url 'add_item' list.id %}" align="center">
+    <form method="post" action="{% url 'add_subject' course.id %}" align="center">
         {% csrf_token %}
-        <input type="text" name="item_title">
+        <input type="text" name="subject_title">
         <input type="submit">
     </form>
 

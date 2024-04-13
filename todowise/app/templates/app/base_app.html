@@ -75,18 +75,18 @@
                     <span class="material-symbols-outlined">logout</span>
                 </a>
             <br/>
-                {% url 'to_do_list' list.id as to_do_list_url %}
-                {% if request.path == to_do_list_url %}
+                {% url 'course_list' course.id as course_list_url %}
+                {% if request.path == course_list_url %}
                 <a title="Return" href="javascript:history.back()">
                     <span class="material-symbols-outlined">keyboard_return</span>
                 </a>
                 {% endif %}
-                {% url 'open_item' list.id item.id as open_item_url %}
-                {% if request.path == open_item_url %}
-                <a title="Return" href="javascript:history.back()">
-                    <span class="material-symbols-outlined">keyboard_return</span>
-                </a>
-                {% endif %}
+                {% url 'open_subject' course.id subject.id as open_subject_url %}
+                    {% if request.path == open_subject_url %}
+                    <a title="Return" href="javascript:history.back()">
+                        <span class="material-symbols-outlined">keyboard_return</span>
+                    </a>
+                    {% endif %}
             </p>
         </div>
     </nav>

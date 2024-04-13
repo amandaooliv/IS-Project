@@ -5,11 +5,12 @@ urlpatterns = [
     path('', views.index, name='app_index'),
     path('login/', views.app_login, name='app_login'),
     path('logout/', views.app_logout, name='app_logout'),
-    path('list/<int:list_id>/', views.to_do_list, name='to_do_list'),
-    path('list/<int:list_id>/add/', views.add_item, name='add_item'),
-    path('list/<int:list_id>/remove/<int:item_id>', views.remove_item, name='remove_item'),
-    path('list/<int:list_id>/done/<int:item_id>', views.done_item, name='done_item'),
-    path('item/<int:list_id>/<int:item_id>/', views.open_item, name='open_item'),
-    #path('student/', views.edit_student, name='edit_student'),
+    path('course/<int:course_id>/', views.course_list, name='course_list'),
+    path('course/<int:course_id>/add/', views.add_subject, name='add_subject'),
+    #path('student/<int:student_id>/add/', views.add_subject, name='add_subject'),
+    path('register/<int:register_id>/add/', views.add_subject, name='add_subject'),
+    path('course/<int:course_id>/remove/<int:subject_id>', views.remove_subject, name='remove_subject'),
+    path('course/<int:course_id>/done/<int:subject_id>', views.done_subject, name='done_subject'),
+    path('subject/<int:course_id>/<int:subject_id>/', views.open_subject, name='open_subject'),
 ]
 

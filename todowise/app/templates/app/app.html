@@ -103,11 +103,11 @@
         </div>
         <div class="card1">
             <h4 align="center">Total Courses</h4>
-            <p>{{ total_lists }}</p>
+            <p>{{ total_courses }}</p>
         </div>
         <div class="card1">
             <h4 align="center">Total Subjects</h4>
-            <p>{{ total_items }}</p>
+            <p>{{ total_subjects }}</p>
         </div>
         <div class="card1">
             <h4 align="center">Total Teachers</h4>
@@ -119,9 +119,9 @@
         <h3 align="center">Courses list</h3>
 
         <ul>
-            {% for list in user.lists.all %}
+            {% for course in user.courses.all %}
             <li style="background-color: #FFFFFF;">
-                <a href="{% url 'to_do_list' list.id %}" style="color: #212C41;">{{ list.title }}</a>
+                <a href="{% url 'course_list' course.id %}" style="color: #212C41;">{{ course.title }}</a>
             </li>
             {% endfor %}
         </ul>

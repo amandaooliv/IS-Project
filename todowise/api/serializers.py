@@ -1,18 +1,18 @@
 from rest_framework import serializers
-from app.models import List, Item
+from app.models import Course, Subject
 
-class ListSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = List
+        model = Course
         fields = '__all__'
 
-class ItemSerializer(serializers.ModelSerializer):
+class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
+        model = Subject
         fields = '__all__'
 
-class ListDetailSerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many = True, read_only = True)
+class CourseDetailSerializer(serializers.ModelSerializer):
+    subjects = SubjectSerializer(many = True, read_only = True)
     class Meta:
-        model = List
-        fields = ['id', 'title', 'items']
+        model = Course
+        fields = ['id', 'title', 'subjects']

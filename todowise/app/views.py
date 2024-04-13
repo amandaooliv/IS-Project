@@ -3,20 +3,21 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
 
 
-from .models import User, List, Item, Student, Grade, Attendance
+from .models import User, Course, Subject, Student, Grade, Attendance, Register
+
 
 def index(request):
     if request.user.is_authenticated:
         students_all = Student.objects.all()
         total_students = students_all.count()  # Conta todos os alunos
-        total_lists = List.objects.all().count()
-        total_items = Item.objects.all().count()
+        total_courses = Course.objects.all().count()
+        total_subjects = Subject.objects.all().count()
         total_users = User.objects.all().count()
         context = {
             'students_all': students_all,
             'total_students': total_students,
-            'total_lists': total_lists,
-            'total_items': total_items,
+            'total_courses': total_courses,
+            'total_subjects': total_subjects,
             'total_users': total_users}
         return render(request, template_name = 'app/app.html', context = context)
     else:
@@ -41,40 +42,40 @@ def app_logout(request):
     return redirect('app_login')
 
 
-def to_do_list(request, list_id):
-    #list = List.objects.get(pk=list_id)
-    list = get_object_or_404(List, pk = list_id, user = request.user)
-    return render(request, template_name = 'app/list.html', context = {'list':list})
+def course_list(request, course_id):
+    #course = Course.objects.get(pk=course_id)
+    course = get_object_or_404(Course, pk = course_id, user = request.user)
+    return render(request, template_name = 'app/course.html', context = {'course':course})
 
 
-def add_item(request, list_id):
-    item_title = request.POST.get('item_title')
-    list = get_object_or_404(List, pk = list_id, user = request.user)
-    item = Item(title = item_title, list = list, user = request.user)
-    item.save()
-    return redirect('to_do_list', list_id = list_id)
+def add_subject(request, course_id):
+    subject_title = request.POST.get('subject_title')
+    course = get_object_or_404(Course, pk = course_id, user = request.user)
+    subject = Subject(title = subject_title, course = course, user = request.user)
+    subject.save()
+    return redirect('course_list', course_id = course_id)
 
 
-def remove_item(request, list_id, item_id):
-    list = get_object_or_404(List, pk = list_id, user = request.user)
-    item = get_object_or_404(Item, pk = item_id, list = list)
-    item.delete()
-    return redirect('to_do_list', list_id = list_id)
+def remove_subject(request, course_id, subject_id):
+    course = get_object_or_404(Course, pk = course_id, user = request.user)
+    subject = get_object_or_404(Subject, pk = subject_id, course = course)
+    subject.delete()
+    return redirect('course_list', course_id = course_id)
 
 
-def done_item(request, list_id, item_id):
-    list = get_object_or_404(List, pk = list_id, user = request.user)
-    item = get_object_or_404(Item, pk = item_id, list = list)
-    if item.done is True:
-        item.done = False
+def done_subject(request, course_id, subject_id):
+    course = get_object_or_404(Course, pk = course_id, user = request.user)
+    subject = get_object_or_404(Subject, pk = subject_id, course = course)
+    if subject.done is True:
+        subject.done = False
     else:
-        item.done = True
-    # or -> item.done = not item.done
-    item.save()
-    return redirect('to_do_list', list_id = list_id)
+        subject.done = True
+    # or -> subject.done = not subject.done
+    subject.save()
+    return redirect('course_list', course_id = course_id)
 
 
-def edit_student(request, student_id, list_id):
+def edit_student(request, student_id, course_id):
     student = get_object_or_404(Student, pk=student_id)
     if request.method == 'POST':
         # Receba os dados do formulário e atualize o objeto do aluno
@@ -84,7 +85,7 @@ def edit_student(request, student_id, list_id):
         student.adress = request.POST.get('adress')
         student.email = request.POST.get('email')
         student.celphone = request.POST.get('celphone')
-        student.list = get_object_or_404(List, pk=list_id, user=request.user)
+        student.course = get_object_or_404(Course, pk=course_id, user=request.user)
         student.save()
 
         return redirect('student_detail', student_id=student_id)
@@ -129,8 +130,8 @@ def add_edit_grade(request, student_id):
         pass
     return render(request, 'app/add_edit_grade.html', {'student': student})
 
-def open_item(request, list_id, item_id):
-    #list = List.objects.get(pk=list_id)
-    list = get_object_or_404(List, pk = list_id, user = request.user)
-    item = get_object_or_404(Item, pk = item_id, list = list)
-    return render(request, template_name = 'app/subjects.html', context = {'item':item})
+def open_subject(request, course_id, subject_id):
+    course = get_object_or_404(Course, pk = course_id, user = request.user)
+    subject = get_object_or_404(Subject, pk = subject_id, course = course)
+    return render(request, template_name = 'app/subjects.html', context = {'subject':subject})
+
