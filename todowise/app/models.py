@@ -29,13 +29,24 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.first_name_student} {self.last_name_student}'
 
+class Register(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registers', default=1)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers')
+    #subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    #if para só aparecer subject se estiver dentro do curso
+    #subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.course} {self.student}'
+
 
 class Subject(models.Model):
     title = models.CharField(max_length=100)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subjects')
-    #student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='subjects', default=1)
+    register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subjects')
-    done = models.BooleanField(default=False)
+    #done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -60,13 +71,3 @@ class Attendance(models.Model):
     def __str__(self):
         return f'{self.student} - {self.subject} - {self.date} - Present: {self.present}'
 
-class Register(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registers', default=1)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    #if para só aparecer subject se estiver dentro do curso
-    #subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.course} {self.student}'
