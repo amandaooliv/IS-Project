@@ -24,17 +24,14 @@ class Student(models.Model):
     adress = models.CharField(max_length=255)
     email = models.EmailField()
     celphone = models.CharField(max_length=20)
-    #course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='student_subjects')
 
     def __str__(self):
         return f'{self.first_name_student} {self.last_name_student}'
 
+
 class Register(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registers', default=1)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers')
-    #subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    #if para só aparecer subject se estiver dentro do curso
-    #subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers', default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -46,7 +43,6 @@ class Subject(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subjects', null=True)
     register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subjects')
-    #done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

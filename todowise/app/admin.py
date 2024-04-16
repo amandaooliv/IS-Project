@@ -27,7 +27,6 @@ class SubjectInline1(admin.TabularInline):
     extra = 1
 
 
-
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('title', 'user')
@@ -41,6 +40,7 @@ class SubjectAdmin(admin.ModelAdmin):
     #search_fields = ('title')
     fields = ('title', 'course', 'user')
 
+
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     list_display = ('first_name_student', 'last_name_student', 'birth_date', 'email')
@@ -52,6 +52,7 @@ class StudentAdmin(admin.ModelAdmin):
 class StudentGradeAdmin(admin.ModelAdmin):
     list_display = ('subject', 'student', 'grade')
     #search_fields = ('grade')
+
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
@@ -77,7 +78,7 @@ class SubjectInline2(admin.TabularInline):
 @admin.register(Register)
 class RegisterAdmin(admin.ModelAdmin):
     inlines = [SubjectInline2]
-    list_display = ('student', 'created_at')
-    #list_filter = ('course', 'created_at')
+    list_display = ('course', 'student', 'created_at')
+    #list_filter = ('created_at')
     #search_fields = ('created_at')
 
