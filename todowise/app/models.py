@@ -43,14 +43,14 @@ class Register(models.Model):
 
 class Subject(models.Model):
     title = models.CharField(max_length=100)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subjects')
-    register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subjects', null=True)
+    register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subjects')
     #done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.title} (done={self.done})'
+        return f'{self.title})'
 
 
 class Grade(models.Model):
