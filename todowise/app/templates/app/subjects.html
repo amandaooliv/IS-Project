@@ -104,6 +104,8 @@
         <tr>
             <th>Student</th>
             <th>Grade</th>
+            <th>Edit Grade</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -111,10 +113,20 @@
         <tr>
             <td>{{ grade.student.first_name_student }} {{ grade.student.last_name_student }}</td>
             <td>{{ grade.grade }}</td>
+            <td>
+                <form method="post" action="{% url 'update_grade' grade.id %}">
+                    {% csrf_token %}
+                    <input type="number" name="grade" min="0" max="10" step="0.01" required>
+                    <button type="submit">Save</button>
+                </form>
+            </td>
+            <td>{{ status }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+
 
 </div>
 
