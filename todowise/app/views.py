@@ -47,6 +47,12 @@ def course_list(request, course_id):
     course = get_object_or_404(Course, pk = course_id, user = request.user)
     return render(request, template_name = 'app/course.html', context = {'course':course})
 
+def student_list(request):
+    student = Student.objects.all()
+    #student = get_object_or_404(Student.objects.all())
+    get_object_or_404(student)
+    return render(request, template_name = 'app/student.html', context = {'student_subjects':student})
+
 
 def add_subject(request, course_id):
     subject_title = request.POST.get('subject_title')
@@ -75,7 +81,7 @@ def done_subject(request, course_id, subject_id):
     return redirect('course_list', course_id = course_id)
 
 
-def edit_student(request, student_id, course_id):
+def edit_student_drop(request, student_id, course_id):
     student = get_object_or_404(Student, pk=student_id)
     if request.method == 'POST':
         # Receba os dados do formulário e atualize o objeto do aluno
@@ -88,7 +94,7 @@ def edit_student(request, student_id, course_id):
         student.course = get_object_or_404(Course, pk=course_id, user=request.user)
         student.save()
 
-        return redirect('student_detail', student_id=student_id)
+        #return redirect('edit_student', student_id=student_id)
     return render(request, 'app/student.html', {'student': student})
 
 
