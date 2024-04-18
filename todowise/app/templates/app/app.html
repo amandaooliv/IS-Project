@@ -69,6 +69,7 @@
             padding: 10px 20px;
             margin: 10px 0;
             transition: background-color 0.3s ease;
+            font-size:20px;
         }
 
         li:hover {
@@ -94,24 +95,25 @@
     {% block content %}
 
 
-    <div class="container">
-        <div class="card1">
-            <h4 align="center"><a href="{% url 'app_index' %}">Total Courses</a></h4>
-            <p>{{ total_courses }}</p>
-        </div>
-        <div class="card1">
-            <h4 align="center"><a href="{% url 'subject_list' %}">Total Subjects</a></h4>
-            <p>{{ total_subjects }}</p>
-        </div>
-        <div class="card1">
-            <h4 align="center"><a href="{% url 'user_list' %}">Total Teachers</a></h4>
-            <p>{{ total_users }}</p>
-        </div>
-        <div class="card1">
-             <h4 align="center"><a href="{% url 'student_list' %}">Total Students</a></h4>
-            <p>{{ total_students }}</p>
-        </div>
+<div class="container">
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'app_index' %}" style="color: inherit; text-decoration: none;">Total Courses</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_courses }}</p>
     </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'subject_list' %}" style="color: inherit; text-decoration: none;">Total Subjects</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_subjects }}</p>
+    </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'user_list' %}" style="color: inherit; text-decoration: none;">Total Teachers</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_users }}</p>
+    </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'student_list' %}" style="color: inherit; text-decoration: none;">Total Students</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_students }}</p>
+    </div>
+</div>
+
 
     <div class="card2">
         <h3 align="center">Courses list</h3>

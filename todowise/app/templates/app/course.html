@@ -38,9 +38,10 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 10px 20px;
-            margin: 10px 0;
+            padding: 25px 70px;
+            margin: 20px 0;
             transition: background-color 0.3s ease;
+            font-size:20px;
         }
 
         li:hover {
@@ -73,9 +74,9 @@
         {% for subject in course.subjects.all %}
         <li style="background-color: #212C41;">
             <span>
-                <a href="{% url 'open_subject' course.id subject.id %}" style="color: #FFFFFF;">
+                <a href="{% url 'open_subject' course.id subject.id %}" style="color: #FFFFFF; text-decoration: none;">
                 {{ subject.title }}</a>
-                (<a href="{% url 'remove_subject' course.id subject.id %}" style="color: #FFFFFF;">X</a>)
+                (<a href="{% url 'remove_subject' course.id subject.id %}" style="color: #FFFFFF;  text-decoration: none;">X</a>)
             </span>
         </li>
         {% endfor %}
