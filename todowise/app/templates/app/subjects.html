@@ -93,7 +93,7 @@
 
     <div class="container">
         <div class="user-info">
-            <h4 class="white-text" style="text-align: center;">User Information:</h4>
+            <h4 class="white-text" style="text-align: center;">Teacher Information:</h4>
             <p class="white-text"><strong>Username:</strong> {{ subject.user.username }}</p>
             <p class="white-text"><strong>First Name:</strong> {{ subject.user.first_name }}</p>
             <p class="white-text"><strong>Last Name:</strong> {{ subject.user.last_name }}</p>
@@ -141,13 +141,24 @@
             <td>
                 <form method="post" action="{% url 'update_grade' grade.id %}">
                     {% csrf_token %}
-                    <input type="number" name="grade" min="0" max="10" step="0.01" required>
+                    <input type="number" name="grade" min="0" max="10" step="0.01" value="Enter grade" required>
                     <button type="submit">Save</button>
                 </form>
             </td>
-            <td>{{ status }}</td>
+            <td>
+                {% if grade.grade >= 5 %}
+                    Aprovado
+                    {% if grade.grade < 5 %}
+                    Reprovado
+                {% else %}
+                    Sem nota
+                    {% endif %}
+                {% endif %}
+            </td>
+
         </tr>
         {% endfor %}
+
     </tbody>
 </table>
 

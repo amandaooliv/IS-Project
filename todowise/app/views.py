@@ -116,12 +116,6 @@ def open_subject(request, course_id, subject_id):
     course = get_object_or_404(Course, pk = course_id, user = request.user)
     subject = get_object_or_404(Subject, pk = subject_id, course = course)
     grades = Grade.objects.filter(subject=subject).prefetch_related('student')
-    students_grades = []
-    for grade in grades:
-        student_info = {
-            'student': grade.student,
-            'grade': grade.grade,
-        }
-        students_grades.append(student_info)
+
     return render(request, template_name = 'app/subjects.html', context = {'subject':subject, 'grades':grades})
 
