@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Subjects</title>
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
 </head>
 
 <style>
@@ -98,8 +101,30 @@
         </div>
     </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault(); // Evita o comportamento padrão de envio do formulário
 
-  <table>
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize(); // Serializa os dados do formulário
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                success: function(response) {
+                    // Atualiza a tabela com os novos dados retornados
+                    $('#grades-table').html(response.html);
+                }
+            });
+        });
+    });
+</script>
+
+  <table id="grades-table">
     <thead>
         <tr>
             <th>Student</th>

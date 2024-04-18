@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 from .models import User, Course, Subject, Student, Grade, Attendance, Register
 
@@ -46,10 +48,12 @@ def course_list(request, course_id):
     course = get_object_or_404(Course, pk = course_id, user = request.user)
     return render(request, template_name = 'app/course.html', context = {'course':course})
 
+def subject_list(request):
+    subjects = Subject.objects.all()
+    return render(request, template_name = 'app/subject_list.html', context = {'subjects':subjects})
+
 def student_list(request):
     student = Student.objects.all()
-    #student = get_object_or_404(Student.objects.all())
-    #get_object_or_404(student)
     return render(request, template_name = 'app/student.html', context = {'student_subjects':student})
 
 def user_list(request):
@@ -64,24 +68,6 @@ def add_subject(request, course_id):
     subject = Subject(title = subject_title, course = course, user = request.user)
     subject.save()
     return redirect('course_list', course_id = course_id)
-
-
-def add_grade(request, student_id, subject_id):
-    if request.method == 'POST':
-        grade_value = request.POST.get('grade')
-        student = get_object_or_404(Student, pk=student_id)
-        subject = get_object_or_404(Subject, pk=subject_id)
-
-        # Procurar por uma instância de Grade existente ou criar uma nova
-        grade, created = Grade.objects.get_or_create(student=student, subject=subject, defaults={'grade': grade_value})
-
-        if not created:
-            # Atualizar a nota se já existir
-            grade.grade = grade_value
-            grade.save()
-
-        # Retornar a nota atualizada em JSON
-        return JsonResponse({'grade': grade.grade})
 
 
 def remove_subject(request, course_id, subject_id):
@@ -108,21 +94,13 @@ def update_grade(request, grade_id):
         grade = Grade.objects.get(pk=grade_id)
         grade.grade = new_grade
         grade.save()
-    #return redirect('open_subject')  # Redireciona para a página com a lista de notas
-    return render(request, 'app/subjects.html')
-
-def update_status(request, student_id):
-    student = Student.objects.get(pk=student_id)
-    grades = Grade.objects.filter(student=student)
-
-    for grade in grades:
-        if all(grade.grade >= 5):
-            status = "Aprovado"
-        else:
-            status = "Reprovado"
-    #status = "Aprovado" if all(grade.grade >= 5 for grade in grades) else "Reprovado"
-    return render(request, 'subjects.html', context= {'status': status})
-
+        # Redireciona de volta para a mesma página
+        grades = Grade.objects.all()
+        # Renderiza a parte da tabela atualizada em HTML
+        html = render_to_string('app/grades_table.html', {'grades': grades})
+        # Retorna a parte da tabela como JSON
+        return JsonResponse({'html': html})
+        #return render(request, 'subjects.html', context={'grades': grades})
 
 def edit_attendance(request, attendance_id):
     attendance = get_object_or_404(Attendance, pk=attendance_id)

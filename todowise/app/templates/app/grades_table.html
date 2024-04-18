@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+</head>
+<body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault(); // Evita o comportamento padrão de envio do formulário
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize(); // Serializa os dados do formulário
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                success: function(response) {
+                    // Atualiza a tabela com os novos dados retornados
+                    $('#grades-table').html(response.html);
+                }
+            });
+        });
+    });
+</script>
+
+  <table id="grades-table">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Edit Grade</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grade in grades %}
+        <tr>
+            <td>{{ grade.student.first_name_student }} {{ grade.student.last_name_student }}</td>
+            <td>{{ grade.grade }}</td>
+            <td>
+                <form method="post" action="{% url 'update_grade' grade.id %}" onsubmit="reloadPage()">
+                    {% csrf_token %}
+                    <input type="number" name="grade" min="0" max="10" step="0.01" required>
+                    <button type="submit">Save</button>
+                </form>
+            </td>
+            <td>{{ status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
