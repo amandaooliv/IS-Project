@@ -87,7 +87,7 @@
 
 {% block content %}
 
-    <h3 class="white-text" style="text-align: center;"><p>{{ subject.title }}</p></h3>
+<h3 class="white-text" style="text-align: center;"><p>{{ subject.title }}</p></h3>
 
 <div class="right-column">
 
@@ -100,6 +100,7 @@
             <p class="white-text"><strong>Email:</strong> {{ subject.user.email }}</p>
         </div>
     </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -124,6 +125,7 @@
     });
 </script>
 
+
   <table id="grades-table">
     <thead>
         <tr>
@@ -133,38 +135,60 @@
             <th>Status</th>
         </tr>
     </thead>
-    <tbody>
+<tbody>
+    {% for student in students %}
+    <tr>
+        <td>{{ student.first_name_student }} {{ student.last_name_student }}</td>
+
+        <td>
+            {% for grade in grades %}
+                {% if grade.student == student %}
+                    {{ grade.grade }}
+                {% endif %}
+            {% endfor %}
+        </td>
+
+        <td>
         {% for grade in grades %}
-        <tr>
-            <td>{{ grade.student.first_name_student }} {{ grade.student.last_name_student }}</td>
-            <td>{{ grade.grade }}</td>
-            <td>
+            {% if grade.student == student %}
                 <form method="post" action="{% url 'update_grade' grade.id %}">
                     {% csrf_token %}
-                    <input type="number" name="grade" min="0" max="10" step="0.01" value="Enter grade" required>
+                    <input type="number" name="grade" min="0" max="10" step="0.01" placeholder="Enter grade" value="{{ grade.grade }}" required>
                     <button type="submit">Save</button>
                 </form>
-            </td>
-            <td>
-                {% if grade.grade >= 5 %}
-                    Aprovado
-                    {% if grade.grade < 5 %}
-                    Reprovado
-                {% else %}
-                    Sem nota
+            {% endif %}
+        {% empty %}
+            <form method="post" action="{% url 'add_grade' %}">
+                {% csrf_token %}
+                <input type="hidden" name="student_id" value="{{ student.id }}">
+                <input type="number" name="grade" min="0" max="10" step="0.01" placeholder="Enter grade" required>
+                <button type="submit">Save</button>
+            </form>
+        {% endfor %}
+        </td>
+
+
+        <td>
+            {% for grade in grades %}
+                {% if grade.student == student %}
+                    {% if grade.grade >= 5 %}
+                        Aprovado
+                    {% else %}
+                        Reprovado
                     {% endif %}
                 {% endif %}
-            </td>
+            {% empty %}
+                Sem nota
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
 
-        </tr>
-        {% endfor %}
 
-    </tbody>
 </table>
 
 
-
-</div>
 
 {% endblock %}
 

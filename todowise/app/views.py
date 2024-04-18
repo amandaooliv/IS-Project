@@ -88,6 +88,25 @@ def done_subject(request, course_id, subject_id):
     subject.save()
     return redirect('course_list', course_id = course_id)
 
+
+from django.shortcuts import redirect
+
+def add_grade(request, studend_id, subject_id, grade_id):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        new_grade = float(request.POST.get('grade'))
+        student = Student.objects.get(pk=student_id)
+        subject_id = request.GET.get('subject_id')
+        subject = Subject.objects.get(pk=subject_id)
+        # Em seguida, você cria a nota associada ao aluno e à disciplina:
+        grade = Grade.objects.create(student=student, subject=subject, grade=new_grade)
+        # Seja qual for a maneira que você obtém a disciplina, você cria a nota:
+        grade = Grade.objects.create(student=student, grade=new_grade)
+        # Redireciona de volta para a página da disciplina após adicionar a nota
+        return redirect('open_subject', course_id=subject.course.id, subject_id=subject.id)
+
+
+
 def update_grade(request, grade_id):
     if request.method == 'POST':
         new_grade = float(request.POST.get('grade'))
@@ -113,9 +132,13 @@ def edit_attendance(request, attendance_id):
 
 
 def open_subject(request, course_id, subject_id):
-    course = get_object_or_404(Course, pk = course_id, user = request.user)
-    subject = get_object_or_404(Subject, pk = subject_id, course = course)
-    grades = Grade.objects.filter(subject=subject).prefetch_related('student')
+    subject = get_object_or_404(Subject, pk=subject_id)
+    # Obter todos os registros relacionados à disciplina
+    registers = Register.objects.all()
+    # Extrair os alunos desses registros
+    students = [register.student for register in registers]
+    # Obter as notas dos alunos nesta disciplina
+    grades = Grade.objects.filter(student__in=students, subject=subject)
 
-    return render(request, template_name = 'app/subjects.html', context = {'subject':subject, 'grades':grades})
-
+    return render(request, template_name='app/subjects.html',
+                  context={'subject': subject, 'students': students, 'grades': grades})
