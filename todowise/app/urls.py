@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.app_logout, name='app_logout'),
     path('course/<int:course_id>/', views.course_list, name='course_list'),
     path('student/', views.student_list, name='student_list'),
+    path('user/', views.user_list, name='user_list'),
     path('course/<int:course_id>/remove/<int:subject_id>', views.remove_subject, name='remove_subject'),
     path('course/<int:course_id>/done/<int:subject_id>', views.done_subject, name='done_subject'),
     #path('course/<int:course_id>/status/<int:subject_id>', views.status_student, name='status_student'),

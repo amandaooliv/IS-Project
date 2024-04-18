@@ -49,8 +49,13 @@ def course_list(request, course_id):
 def student_list(request):
     student = Student.objects.all()
     #student = get_object_or_404(Student.objects.all())
-    get_object_or_404(student)
+    #get_object_or_404(student)
     return render(request, template_name = 'app/student.html', context = {'student_subjects':student})
+
+def user_list(request):
+    users = User.objects.all()
+    #get_object_or_404(users)
+    return render(request, template_name = 'app/user.html', context = {'users':users})
 
 
 def add_subject(request, course_id):
