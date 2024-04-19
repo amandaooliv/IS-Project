@@ -29,25 +29,25 @@ class Student(models.Model):
         return f'{self.first_name_student} {self.last_name_student}'
 
 
-class Register(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registers', default=1)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers', default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.course} {self.student}'
-
 
 class Subject(models.Model):
     title = models.CharField(max_length=100)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subjects', null=True)
-    register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    #register = models.ForeignKey(Register, on_delete=models.CASCADE, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subjects')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.title})'
 
+class Register(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registers', default=1)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registers', default=1)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.course} {self.student}'
 
 class Grade(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)

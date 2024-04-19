@@ -8,13 +8,6 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name','email')
 
 
-#class StudentInline(admin.TabularInline):
-#    model = Student
-#    extra = 1
-
-#class SubjectInline(admin.TabularInline):
-#    model = Subject
-#    extra = 1
 
 class SubjectInlineForm1(forms.ModelForm):
     class Meta:
@@ -61,20 +54,27 @@ class AttendanceAdmin(admin.ModelAdmin):
     search_fields = ('date', 'present')
 
 
-class SubjectInlineForm2(forms.ModelForm):
-    class Meta:
-        model = Subject
-        fields = ['title', 'course', 'user']
-        widgets = {
-            'title': forms.Select(choices=[(subject.title, subject.title) for subject in Subject.objects.all()])
-        }
 
-class SubjectInline2(admin.TabularInline):
-    model = Subject
-    form = SubjectInlineForm2
-    extra = 1
+
+
+
+class RegisterAdminForm(forms.ModelForm):
+    class Meta:
+        model = Register
+        fields = '__all__'
+
+    # Adiciona o campo de seleção de Subject
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all(), required=False, label='Subject')
 
 @admin.register(Register)
 class RegisterAdmin(admin.ModelAdmin):
-    inlines = [SubjectInline2]
-    list_display = ('course', 'student', 'created_at')
+    list_display = ('course', 'subject', 'student', 'created_at')  # Adicionamos 'subject' aqui
+    form = RegisterAdminForm  # Usamos o formulário personalizado
+
+    def save_model(self, request, obj, form, change):
+        # Se um Subject foi selecionado no formulário
+        if form.cleaned_data.get('subject'):
+            # Associa o Subject ao Register
+            obj.subject = form.cleaned_data['subject']
+        # Salva o Register
+        super().save_model(request, obj, form, change)
