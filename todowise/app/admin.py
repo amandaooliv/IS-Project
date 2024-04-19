@@ -64,7 +64,6 @@ class AttendanceAdmin(admin.ModelAdmin):
 class SubjectInlineForm2(forms.ModelForm):
     class Meta:
         model = Subject
-        #exclude = ['course']
         fields = ['title', 'course', 'user']
         widgets = {
             'title': forms.Select(choices=[(subject.title, subject.title) for subject in Subject.objects.all()])
@@ -79,6 +78,3 @@ class SubjectInline2(admin.TabularInline):
 class RegisterAdmin(admin.ModelAdmin):
     inlines = [SubjectInline2]
     list_display = ('course', 'student', 'created_at')
-    #list_filter = ('created_at')
-    #search_fields = ('created_at')
-

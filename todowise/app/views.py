@@ -113,13 +113,9 @@ def update_grade(request, grade_id):
         grade = Grade.objects.get(pk=grade_id)
         grade.grade = new_grade
         grade.save()
-        # Redireciona de volta para a mesma página
         grades = Grade.objects.all()
-        # Renderiza a parte da tabela atualizada em HTML
-        html = render_to_string('app/grades_table.html', {'grades': grades})
-        # Retorna a parte da tabela como JSON
-        return JsonResponse({'html': html})
-        #return render(request, 'subjects.html', context={'grades': grades})
+
+        return render(request, template_name='app/subjects.html', context={'grades': grades})
 
 def edit_attendance(request, attendance_id):
     attendance = get_object_or_404(Attendance, pk=attendance_id)
