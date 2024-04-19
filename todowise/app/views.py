@@ -130,10 +130,18 @@ def edit_attendance(request, attendance_id):
 def open_subject(request, course_id, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
     # Obter todos os registros relacionados à disciplina
-    registers = Register.objects.all()
+    registers = Register.objects.filter(course_id=course_id, subject=subject)
     # Extrair os alunos desses registros
     students = [register.student for register in registers]
     # Obter as notas dos alunos nesta disciplina
+    grades = Grade.objects.filter(student__in=students, subject=subject)
+
+    # Verificar e criar Grades para alunos que não possuem Grade nesta disciplina
+    for student in students:
+        if not grades.filter(student=student).exists():
+            Grade.objects.create(subject=subject, student=student, grade=0.0)
+
+    # Atualizar a lista de Grades para incluir as novas Grades criadas
     grades = Grade.objects.filter(student__in=students, subject=subject)
 
     return render(request, template_name='app/subjects.html',

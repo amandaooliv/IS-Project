@@ -76,7 +76,8 @@
             <span>
                 <a href="{% url 'open_subject' course.id subject.id %}" style="color: #FFFFFF; text-decoration: none;">
                 {{ subject.title }}</a>
-                (<a href="{% url 'remove_subject' course.id subject.id %}" style="color: #FFFFFF;  text-decoration: none;">X</a>)
+                (<a href="{% url 'remove_subject' course.id subject.id %}" style="color: #FFFFFF;  text-decoration: none;"><button onClick="window.location.reload()" type="submit">X</button></a>)
+
             </span>
         </li>
         {% endfor %}
