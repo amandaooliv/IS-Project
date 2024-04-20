@@ -1,0 +1,102 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+</head>
+
+<style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+
+        h3 {
+            color: #333;
+            text-align: left;
+            margin-top: 40px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            /*font-weight: bold;*/
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<body>
+
+{% extends "app/base_app.html" %}
+
+{% block content %}
+
+<div class="container">
+        <div class="left-column">
+
+    <h3 class="white-text" style="text-align: center;">{{ list.title }}</h3>
+
+    <ul>
+        {% for item in list.items.all %}
+        <li style="background-color: #212C41;">
+            <span>
+                <a href="{% url 'open_item' list.id item.id %}" style="color: #FFFFFF;">
+                {{ item.title }}</a>
+                (<a href="{% url 'remove_item' list.id item.id %}" style="color: #FFFFFF;">X</a>)
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br/>
+
+    <!-- <h4 align="left">Add subject:</h4> -->
+
+    <form method="post" action="{% url 'add_item' list.id %}" align="center">
+        {% csrf_token %}
+        <label class="white-text" style="font-size: 18px;">Add subject:</label>  <input type="text" name="item_title">
+        <input type="submit">
+    </form>
+
+    </div>
+
+ </div>
+
+{% endblock %}
+
+</body>
+
+</html>
