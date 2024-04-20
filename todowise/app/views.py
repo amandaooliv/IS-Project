@@ -118,7 +118,7 @@ def update_grade(request, grade_id):
         return render(request, template_name='app/subjects.html', context={'grades': grades})
 
 def edit_attendance(request, attendance_id):
-    attendance = get_object_or_404(Attendance, pk=attendance_id)
+    attendance = get_object_or_404(Attendance, pk=attendance_id, user = request.user)
     if request.method == 'POST':
         # Receba os dados do formulário e atualize a presença do aluno
         attendance.present = request.POST.get('present') == 'True'  # ou False, dependendo do formulário
@@ -128,7 +128,7 @@ def edit_attendance(request, attendance_id):
 
 
 def open_subject(request, course_id, subject_id):
-    subject = get_object_or_404(Subject, pk=subject_id)
+    subject = get_object_or_404(Subject, pk=subject_id, user = request.user)
     # Obter todos os registros relacionados à disciplina
     registers = Register.objects.filter(course_id=course_id, subject=subject)
     # Extrair os alunos desses registros
@@ -139,7 +139,7 @@ def open_subject(request, course_id, subject_id):
     # Verificar e criar Grades para alunos que não possuem Grade nesta disciplina
     for student in students:
         if not grades.filter(student=student).exists():
-            Grade.objects.create(subject=subject, student=student, grade=0.0)
+            Grade.objects.create(subject=subject, student=student)
 
     # Atualizar a lista de Grades para incluir as novas Grades criadas
     grades = Grade.objects.filter(student__in=students, subject=subject)

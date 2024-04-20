@@ -43,7 +43,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Grade)
 class StudentGradeAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'student', 'grade')
+    list_display = ('subject', 'student', 'grade', 'status')
     #search_fields = ('grade')
 
 

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+
 
 
 class User(AbstractUser):
@@ -52,7 +54,22 @@ class Register(models.Model):
 class Grade(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    grade = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+    grade = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    status = models.CharField(max_length=10, choices=[('Approved', 'Approved'), ('Repproved', 'Repproved'), ('No grade', 'No grade')], blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # Verifica se o aluno está registrado na matéria
+        if not self.student.registers.filter(subject=self.subject).exists():
+            raise ValidationError("Student is not registered on this subject.")
+
+        if self.grade is None:
+            self.status = 'No grade'
+        elif self.grade >= 5:
+            self.status = 'Approved'
+        else:
+            self.status = 'Repproved'
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.student} - {self.subject} - {self.grade}'

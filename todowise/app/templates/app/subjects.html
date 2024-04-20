@@ -172,15 +172,9 @@
 
         <td>
             {% for grade in grades %}
-                {% if grade.student == student %}
-                    {% if grade.grade >= 5 %}
-                        Aprovado
-                    {% else %}
-                        Reprovado
+                    {% if grade.student == student %}
+                        {{ grade.status }}
                     {% endif %}
-                {% endif %}
-            {% empty %}
-                Sem nota
             {% endfor %}
         </td>
     </tr>
