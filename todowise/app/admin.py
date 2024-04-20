@@ -54,10 +54,6 @@ class AttendanceAdmin(admin.ModelAdmin):
     search_fields = ('date', 'present')
 
 
-
-
-
-
 class RegisterAdminForm(forms.ModelForm):
     class Meta:
         model = Register
@@ -66,10 +62,21 @@ class RegisterAdminForm(forms.ModelForm):
     # Adiciona o campo de seleção de Subject
     subject = forms.ModelChoiceField(queryset=Subject.objects.all(), required=False, label='Subject')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Se um course foi selecionado no formulário
+        if 'course' in self.data:
+            try:
+                # Filtra os subjects com base no course selecionado
+                course_id = int(self.data.get('course'))
+                self.fields['subject'].queryset = Subject.objects.filter(course_id=course_id)
+            except (ValueError, TypeError):
+                pass  # Se não for possível converter para um inteiro, ou course não existir, não filtra
+
 @admin.register(Register)
 class RegisterAdmin(admin.ModelAdmin):
-    list_display = ('course', 'subject', 'student', 'created_at')  # Adicionamos 'subject' aqui
-    form = RegisterAdminForm  # Usamos o formulário personalizado
+    list_display = ('course', 'subject', 'student', 'created_at')
+    form = RegisterAdminForm
 
     def save_model(self, request, obj, form, change):
         # Se um Subject foi selecionado no formulário
