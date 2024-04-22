@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.db.models import Count,Q
 
 from .models import User, Course, Subject, Student, Grade, Attendance, Register
 
@@ -14,12 +15,34 @@ def index(request):
         total_courses = Course.objects.all().count()
         total_subjects = Subject.objects.all().count()
         total_users = User.objects.all().count()
+        attendances_by_subject = Attendance.objects.values('subject__title').annotate(
+            num_present=Count('id', filter=Q(present=True)),
+            num_absent=Count('id', filter=Q(present=False))
+        )
+        # Calcular os percentuais
+        percent_total_students = (total_students / total_users) * 100
+        percent_total_users = 100 - percent_total_students
+
+        # Calcular a porcentagem de presença e ausência
+        for item in attendances_by_subject:
+            total_attendances = item['num_present'] + item['num_absent']
+            if total_attendances > 0:
+                item['percent_present'] = (item['num_present'] / total_attendances) * 100
+                item['percent_absent'] = (item['num_absent'] / total_attendances) * 100
+            else:
+                item['percent_present'] = 0
+                item['percent_absent'] = 0
+
         context = {
             'students_all': students_all,
             'total_students': total_students,
             'total_courses': total_courses,
             'total_subjects': total_subjects,
-            'total_users': total_users}
+            'total_users': total_users,
+            'attendances_by_subject': attendances_by_subject,
+            'percent_total_students': percent_total_students,
+            'percent_total_users': percent_total_users}
+
         return render(request, template_name = 'app/app.html', context = context)
     else:
         return redirect('app_login')
