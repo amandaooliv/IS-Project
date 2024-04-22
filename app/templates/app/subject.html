@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Subject</title>
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+</head>
+
+<style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+
+        h3 {
+            color: #333;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            /*font-weight: bold;*/
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr {
+            background-color: #f5f5f5;
+        }
+
+        .button {
+            height: 30px;
+            text-align: center;
+            border: solid 1px #212C41;
+            border-radius: 5px;
+            color: #212C41;
+            background-color: white;
+            transition: background-color 0.5s ease, color 0.5s ease, transform 0.5s ease;
+        }
+
+        .button:hover {
+            background-color: #212C41;
+            color: white;
+            transform: scale(1.1)
+        }
+
+</style>
+
+<body>
+
+
+{% extends "app/base_app.html" %}
+
+{% block content %}
+
+<div class="container">
+
+<h3 class="white-text" style="text-align: center"><p>{{ subject.title }}</p></h3>
+
+</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ subject.user.username }}</td>
+                <td>{{ subject.user.first_name }}</td>
+                <td>{{ subject.user.last_name }}</td>
+                <td>{{ subject.user.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault(); // Evita o comportamento padrão de envio do formulário
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize(); // Serializa os dados do formulário
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                success: function(response) {
+                    // Atualiza a tabela com os novos dados retornados
+                    $('#grades-table').html(response.html);
+                }
+            });
+        });
+    });
+</script>
+
+
+  <table id="grades-table">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Edit Grade</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+<tbody>
+    {% for student in students %}
+    <tr>
+        <td>{{ student.first_name_student }} {{ student.last_name_student }}</td>
+
+        <td>
+            {% for grade in grades %}
+                {% if grade.student == student %}
+                    {{ grade.grade }}
+                {% endif %}
+            {% endfor %}
+        </td>
+
+        <td>
+        {% for grade in grades %}
+            {% if grade.student == student %}
+                <form method="post" action="{% url 'update_grade' grade.id %}">
+                    {% csrf_token %}
+                    <input type="number" name="grade" min="0" max="10" step="0.01" placeholder="Grade" value="Enter grade" required>
+                    <button class="button" onClick="window.location.reload()" type="submit">Save</button>
+                </form>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
+        </td>
+
+
+        <td>
+            {% for grade in grades %}
+                    {% if grade.student == student %}
+                        {{ grade.status }}
+                    {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+
+</table>
+
+
+
+{% endblock %}
+
+</body>
+
+</html>
