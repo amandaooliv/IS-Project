@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: "Questa Grande", sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .container2 {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .container3 {
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+
+        .card1 {
+            background-color: #212C41;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            transition: transform 0.3s ease;
+            color: #FFFFFF;
+        }
+
+        .card1:hover {
+            transform: translateY(-5px);
+        }
+
+        .card2 {
+            background-color: #212C41;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            transition: transform 0.3s ease;
+            align-items:center;
+            justify-content: center;
+            color: #FFFFFF;
+            max-width: 1250px; /* Adição aqui */
+
+        }
+
+        .card2:hover {
+            transform: translateY(-5px);
+        }
+
+        .card3 {
+            background-color: #212C41;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            transition: transform 0.3s ease;
+            align-items:center;
+            justify-content: center;
+            color: #FFFFFF;
+        }
+
+        .card3:hover {
+            transform: translateY(-5px);
+        }
+
+        h3 {
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+            font-size:20px;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            /*font-weight: bold;*/
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    {% extends "app/base_app.html" %}
+
+    {% block content %}
+
+<div class="container">
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'app_index' %}" style="color: inherit; text-decoration: none;">Total Courses</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_courses }}</p>
+    </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'subject_list' %}" style="color: inherit; text-decoration: none;">Total Subjects</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_subjects }}</p>
+    </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'user_list' %}" style="color: inherit; text-decoration: none;">Total Teachers</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_users }}</p>
+    </div>
+    <div class="card1">
+        <h4 align="center" style="color: white; text-decoration: none;"><a href="{% url 'student_list' %}" style="color: inherit; text-decoration: none;">Total Students</a></h4>
+        <p style="text-align: center; font-size: 24px;">{{ total_students }}</p>
+    </div>
+</div>
+
+
+<div class="container2">
+
+    <div class="card2" style="width: 1250px">
+        <h3 align="center">Course List</h3>
+
+        <ul>
+            {% for course in user.courses.all %}
+            <li style="background-color: #FFFFFF;">
+                <a href="{% url 'course_list' course.id %}" style="color: #212C41; text-decoration: none;">{{ course.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<div class="container3">
+
+<div class="card3" style="width: 1250px; height: 450px;">
+    <h3 align="center">Frequency by Subject (%)</h3>
+    <canvas id="attendanceChart" width="1000px" height="270px"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    Chart.defaults.color = 'white';
+    var ctx = document.getElementById('attendanceChart').getContext('2d');
+    var attendanceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in attendances_by_subject %}"{{ item.subject__title }}",{% endfor %}],
+            datasets: [{
+                label: 'Presence',
+                data: [{% for item in attendances_by_subject %}{{ item.percent_present|floatformat }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Absence',
+                data: [{% for item in attendances_by_subject %}{{ item.percent_absent|floatformat }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                x: {
+                    stacked: true
+                }
+            }
+        }
+    });
+</script>
+
+</div>
+
+</body>
+
+{% endblock %}
+
+</body>
+
+</html>
